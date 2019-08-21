@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import './videos.dart';
 
 class VideoManager extends StatefulWidget {
+  final initialData;
+  VideoManager(this.initialData);
   @override
   State<StatefulWidget> createState() {
     return _VideoManagerState();
@@ -11,6 +13,12 @@ class VideoManager extends StatefulWidget {
 
 class _VideoManagerState extends State<VideoManager> {
   List<String> _videos = ['Red Panda'];
+
+  @override
+  void initState(){
+    _videos.add(widget.initialData);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Videos extends StatelessWidget {
   final List<String> videos;
   
-  Videos(this.videos);
+  Videos([this.videos=const []]);
   @override
   Widget build(BuildContext context) {
     return Column(

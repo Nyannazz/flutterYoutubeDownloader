@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class SearchBar extends StatefulWidget implements PreferredSizeWidget {
   final String appName;
   final Function searchVideo;
-  SearchBar({String this.appName,Function this.searchVideo});
+  SearchBar({this.appName, this.searchVideo});
 
   //final Function searchVideo;
 
@@ -14,7 +14,6 @@ class SearchBar extends StatefulWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
@@ -22,10 +21,17 @@ class _SearchBarState extends State<SearchBar> {
   Icon searchIcon = Icon(Icons.search);
   Widget appBarTitle;
   @override
+  void initState() {
+    super.initState();
+    
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: appBarTitle=Text(widget.appName),
+      title: this.appBarTitle,
       actions: <Widget>[
         IconButton(
           icon: searchIcon,
@@ -35,6 +41,9 @@ class _SearchBarState extends State<SearchBar> {
               if (this.searchIcon.icon == Icons.search) {
                 this.searchIcon = Icon(Icons.close);
                 this.appBarTitle = TextField(
+                  onSubmitted: (text){
+                    widget.searchVideo(text);
+                  },
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -53,7 +62,4 @@ class _SearchBarState extends State<SearchBar> {
       ],
     );
   }
-}
-
-class $appName {
 }
