@@ -19,6 +19,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  TabController _tabController;
   final Map appState = {
     'loading': false,
     'error': false,
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tabController = TabController(length: 2);
   }
 
   @override
@@ -88,28 +90,73 @@ class _MyAppState extends State<MyApp> {
                             ],
                           ),
                         ),
-                      Card(
-                          child: DefaultTabController(
+                      DefaultTabController(
                         length: 2,
-                        child: Row(
-                          children: <Widget>[
-                            TabBar(
-                              tabs: [
-                                Tab(
-                                    icon: Icon(Icons.search,
-                                        color: Colors.deepPurple)),
-                                Tab(
-                                    icon: Icon(Icons.directions_transit,
-                                        color: Colors.deepPurple)),
-                              ],
-                            )
-                          ],
+                        child: Expanded(
+                          child: Column(
+                            children: [
+                              Card(
+                                child: TabBar(
+                                  tabs: [
+                                    Tab(
+                                        icon: Icon(Icons.search,
+                                            color: Colors.deepPurple)),
+                                    Tab(
+                                        icon: Icon(Icons.directions_transit,
+                                            color: Colors.deepPurple)),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                  child: Card(
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    Icon(Icons.directions_car,
+                                        color: Colors.deepPurple),
+                                    Icon(Icons.directions_transit,
+                                        color: Colors.deepPurple),
+                                  ],
+                                ),
+                              ))
+                            ],
+                          ),
                         ),
-                      )),
+                      ),
                     ],
                   ),
                 ),
               ),
+      ),
+    );
+  }
+}
+
+class TabBarDemo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.directions_car)),
+                Tab(icon: Icon(Icons.directions_transit)),
+                Tab(icon: Icon(Icons.directions_bike)),
+              ],
+            ),
+            title: Text('Tabs Demo'),
+          ),
+          body: TabBarView(
+            children: [
+              Icon(Icons.directions_car),
+              Icon(Icons.directions_transit),
+              Icon(Icons.directions_bike),
+            ],
+          ),
+        ),
       ),
     );
   }
