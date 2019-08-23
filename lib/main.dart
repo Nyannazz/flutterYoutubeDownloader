@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
   final Map appState = {
     'loading': false,
     'error': false,
+    'found': false,
     'response': {},
   };
 
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
     print(response.body);
     setState(() {
       appState["loading"] = false;
+      appState["found"] = true;
       appState["response"] = json.decode(response.body);
     });
   }
@@ -58,19 +60,54 @@ class _MyAppState extends State<MyApp> {
             appName: "CoonTube"),
         body: appState['loading']
             ? VideoManager("asd")
-            : Card(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Flexible(child: Text(
-                        ((appState["response"].containsKey("title"))
-                            ? appState["response"]["title"]
-                            : "waiting"),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.green)
+            : Container(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Flexible(
+                        child: Text(
+                            ((appState["response"].containsKey("title"))
+                                ? appState["response"]["title"]
+                                : "waiting"),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.green)),
                       ),
-                    ),
-                  ],
+                      if (appState['found'])
+                        Card(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Flexible(
+                                child: Image.network(
+                                    appState["response"]["thumbnail"],
+                                    /* width: 100.0,
+                                height: 100.0, */
+                                    fit: BoxFit.contain),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Card(
+                          child: DefaultTabController(
+                        length: 2,
+                        child: Row(
+                          children: <Widget>[
+                            TabBar(
+                              tabs: [
+                                Tab(
+                                    icon: Icon(Icons.search,
+                                        color: Colors.deepPurple)),
+                                Tab(
+                                    icon: Icon(Icons.directions_transit,
+                                        color: Colors.deepPurple)),
+                              ],
+                            )
+                          ],
+                        ),
+                      )),
+                    ],
+                  ),
                 ),
               ),
       ),
