@@ -18,7 +18,7 @@ class VideoView extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(vertical: 20.0),
             child: Text(
-              ((data.containsKey("title")) ? data["title"] : "waiting"),
+              data["title"],
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               softWrap: false,

@@ -5,6 +5,17 @@ bool filterFormat(str, val) {
   return strParts[0] == val;
 }
 
+List<Widget> createFormatList(arr) {
+  List<Widget> formatList = [];
+  for (Map item in arr) {
+    formatList.add(Align(alignment: Alignment.centerLeft ,child: Text(item["type"])));
+    formatList.add(Align(alignment: Alignment.centerLeft ,child: Text(item["quality"])));
+    formatList.add(Center(child: Container(height: 30.0, child: RaisedButton(child: Text("DOWNLOAD")))));
+  }
+
+  return formatList;
+}
+
 class FormatSelect extends StatelessWidget {
   final List formats;
   FormatSelect([this.formats = const []]);
@@ -33,18 +44,21 @@ class FormatSelect extends StatelessWidget {
             child: TabBarView(
               children: [
                 Card(
-                    child: ListView(
-                  children: videoFormats
-                      .map((item) =>
-                          Text(item["type"], textAlign: TextAlign.center))
-                      .toList(),
-                )),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GridView.count(
+                        crossAxisCount: 3,
+                        childAspectRatio: 3,
+                        children: createFormatList(videoFormats)),
+                  ),
+                ),
                 Card(
-                  child: ListView(
-                    children: audioFormats
-                        .map((item) =>
-                            Text(item["type"], textAlign: TextAlign.center))
-                        .toList(),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: GridView.count(
+                        crossAxisCount: 3,
+                        childAspectRatio: 3,
+                        children: createFormatList(audioFormats)),
                   ),
                 ),
               ],
