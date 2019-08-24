@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import './video_manager.dart';
 import './search_bar.dart';
+import './video_view.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,25 +20,24 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  TabController _tabController;
-  final Map appState = {
-    'loading': false,
-    'error': false,
-    'found': false,
-    'response': {},
-  };
+  bool loading=false;
+  bool found=false;
+  final Map response={};
+  Widget videoTab=Text("wating");
+
 
   Future<String> getVideo() async {
     setState(() {
-      appState["loading"] = true;
+      loading = true;
     });
     http.Response response = await http.get(Uri.encodeFull(
         "http://82.165.121.77:5000/simpleinfo?videolink=https://www.youtube.com/watch?v=Kk3hKNNSHqY"));
     print(response.body);
     setState(() {
-      appState["loading"] = false;
-      appState["found"] = true;
-      appState["response"] = json.decode(response.body);
+      loading = false;
+      found = true;
+      response = json.decode(response.body);
+      videoTab = VideoView(json.decode(response.body));
     });
   }
 
@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 2);
+    /* _tabController = TabController(length: 2); */
   }
 
   @override
@@ -53,111 +53,28 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: Scaffold(
-        appBar: SearchBar(
-            searchVideo: (data) {
-              print(data);
-              print(appState);
-              getVideo();
-            },
-            appName: "CoonTube"),
-        body: appState['loading']
-            ? VideoManager("asd")
-            : Container(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
-                            ((appState["response"].containsKey("title"))
-                                ? appState["response"]["title"]
-                                : "waiting"),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.green)),
-                      ),
-                      if (appState['found'])
-                        Card(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                child: Image.network(
-                                    appState["response"]["thumbnail"],
-                                    /* width: 100.0,
-                                height: 100.0, */
-                                    fit: BoxFit.contain),
-                              ),
-                            ],
-                          ),
-                        ),
-                      DefaultTabController(
-                        length: 2,
-                        child: Expanded(
-                          child: Column(
-                            children: [
-                              Card(
-                                child: TabBar(
-                                  tabs: [
-                                    Tab(
-                                        icon: Icon(Icons.search,
-                                            color: Colors.deepPurple)),
-                                    Tab(
-                                        icon: Icon(Icons.directions_transit,
-                                            color: Colors.deepPurple)),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                  child: Card(
-                                child: TabBarView(
-                                  controller: _tabController,
-                                  children: [
-                                    Icon(Icons.directions_car,
-                                        color: Colors.deepPurple),
-                                    Icon(Icons.directions_transit,
-                                        color: Colors.deepPurple),
-                                  ],
-                                ),
-                              ))
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+          appBar: SearchBar(
+              searchVideo: (data) {
+                print(data);
+                getVideo();
+              },
+              appName: "CoonTube"),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: 0, // this will be set when a new tab is tapped
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Home'),
               ),
-      ),
-    );
-  }
-}
-
-class TabBarDemo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.directions_car)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ],
-            ),
-            title: Text('Tabs Demo'),
-          ),
-          body: TabBarView(
-            children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                title: Text('Messages'),
+              ),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), title: Text('Profile'))
             ],
           ),
-        ),
-      ),
+          body: videoTab),
     );
   }
 }
