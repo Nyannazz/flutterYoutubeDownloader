@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       loading = false;
       found = true;
-      response = json.decode(response.body);
+      /* response = json.decode(response.body); */
       videoTab = VideoView(json.decode(response.body));
     });
   }
