@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  downloads_path_provider: ^0.1.0
   simple_permissions: ^0.1.9
   path_provider: ^1.2.0
   dio: ^2.1.16  

@@ -3,8 +3,7 @@ import 'package:simple_permissions/simple_permissions.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
-
-
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 
 class FileUtils {
   static Future<String> get getFilePath async {
@@ -33,58 +32,15 @@ Future<String> getFilePath() async {
   return directory.path;
 }
 
-/* downloadVideo() async{
-  print("hello download");
-  PermissionStatus permissionResult = await SimplePermissions.requestPermission(Permission. WriteExternalStorage);
-
-  if ( permissionResult == PermissionStatus.authorized/*   || true */) {
-    String dirPath=await getFilePath();
-    print(dirPath);
-    HttpClient client = new HttpClient();
-    client
-        .getUrl(Uri.parse("https://i.imgur.com/W4KUBGP.jpg"))
-        .then((HttpClientRequest request) {
-      print(request);
-      return request.close();
-    }).then((HttpClientResponse response) {
-      print("step 3");
-      var dataFlow=response.pipe(new File('$dirPath/logo_pipe.jpg').openWrite());
-    });
-  }
-} */
-
-/* downloadVideo() async {
-  print("hello download");
-  PermissionStatus permissionResult = await SimplePermissions.requestPermission(
-      Permission.WriteExternalStorage);
-
-  if (permissionResult == PermissionStatus.authorized) {
-    String dirPath = await getFilePath();
-    print(dirPath);
-    HttpClient client = new HttpClient();
-    var _downloadData = List<int>();
-    var fileSave = new File('$dirPath/dogo.jpg');
-    client
-        .getUrl(Uri.parse(
-            "https://i.imgur.com/W4KUBGP.jpg"))
-        .then((HttpClientRequest request) {
-      return request.close();
-    }).then((HttpClientResponse response) {
-      response.listen((d) => 
-        _downloadData.addAll(d)
-      , onDone: () {
-        fileSave.writeAsBytes(_downloadData);
-      });
-    });
-  }
-} */
-
-Future<void> downloadVideo() async {
+/* Future<void> downloadVideo() async {
+    PermissionStatus permissionResult = await SimplePermissions.requestPermission(Permission. WriteExternalStorage);
+    if ( permissionResult == PermissionStatus.authorized) {
     Dio dio = Dio();
 
     var dirToSave = await getApplicationDocumentsDirectory();
-
-    await dio.download("https://i.imgur.com/W4KUBGP.jpg", "${dirToSave.path}/myImage.jpg",
+    /* var dirToSave=await getExternalStorageDirectory(); */
+    print(dirToSave);
+    await dio.download("https://i.imgur.com/W4KUBGP.jpg", "${dirToSave.path}/dogo.jpg",
       onReceiveProgress: (rec, total) {
       print(((rec / total) * 100).toStringAsFixed(0) + "%");
     });
@@ -93,7 +49,33 @@ Future<void> downloadVideo() async {
       throw e;
     }
     print("done");
+
+    }
+  } */
+
+Future<void> downloadVideo() async {
+  PermissionStatus permissionResult = await SimplePermissions.requestPermission(
+      Permission.WriteExternalStorage);
+  if (permissionResult == PermissionStatus.authorized) {
+    Dio dio = Dio();
+
+    /* var dirToSave = await getApplicationDocumentsDirectory();
+    var dirLol=await getExternalStorageDirectory(); */
+    var dlDir = await DownloadsPathProvider.downloadsDirectory;
+    /* Future<Directory> downloadsDirectory = DownloadsPathProvider.downloadsDirectory; */
+
+    try {
+      await dio
+          .download("https://i.imgur.com/W4KUBGP.jpg", "${dlDir.path}/dogo.jpg",
+              onReceiveProgress: (rec, total) {
+        print(((rec / total) * 100).toStringAsFixed(0) + "%");
+      });
+    } catch (e) {
+      throw e;
+    }
+    print("done");
   }
+}
 
 List<Widget> createFormatList(arr) {
   List<Widget> formatList = [];
