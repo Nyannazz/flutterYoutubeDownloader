@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:async/async.dart' as async;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import './video_manager.dart';
 import './search_bar.dart';
 import './video_view.dart';
+import './snack_bar.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,11 +20,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool loading=false;
-  bool found=false;
-  final Map response={};
-  Widget videoTab=Text("wating");
-
+  bool loading = false;
+  bool found = false;
+  final Map response = {};
+  Widget videoTab = Text("wating");
 
   Future<String> getVideo() async {
     setState(() {
@@ -52,7 +51,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: Scaffold(
+      home: Scaffold( 
           appBar: SearchBar(
               searchVideo: (data) {
                 print(data);
@@ -74,7 +73,8 @@ class _MyAppState extends State<MyApp> {
                   icon: Icon(Icons.person), title: Text('Profile'))
             ],
           ),
-          body: videoTab),
+          body: /* videoTab */
+              SnackBarPage(),),
     );
   }
 }

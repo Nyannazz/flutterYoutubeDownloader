@@ -5,22 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 
-class FileUtils {
-  static Future<String> get getFilePath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
 
-/* /*   static Future<File> get getFile async{
-    final path=await getFilePath;
-    return path('$path/myfile.txt');
-  } */
 
-  static Future<File> saveToFile(String data) async{
-    final file=await getFile();
-    return file.writeAsString(data);
-  } */
-}
 
 bool filterFormat(str, val) {
   List strParts = str.split("/");
@@ -32,26 +18,7 @@ Future<String> getFilePath() async {
   return directory.path;
 }
 
-/* Future<void> downloadVideo() async {
-    PermissionStatus permissionResult = await SimplePermissions.requestPermission(Permission. WriteExternalStorage);
-    if ( permissionResult == PermissionStatus.authorized) {
-    Dio dio = Dio();
 
-    var dirToSave = await getApplicationDocumentsDirectory();
-    /* var dirToSave=await getExternalStorageDirectory(); */
-    print(dirToSave);
-    await dio.download("https://i.imgur.com/W4KUBGP.jpg", "${dirToSave.path}/dogo.jpg",
-      onReceiveProgress: (rec, total) {
-      print(((rec / total) * 100).toStringAsFixed(0) + "%");
-    });
-
-    try {} catch (e) {
-      throw e;
-    }
-    print("done");
-
-    }
-  } */
 
 Future<void> downloadVideo() async {
   PermissionStatus permissionResult = await SimplePermissions.requestPermission(

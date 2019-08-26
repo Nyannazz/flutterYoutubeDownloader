@@ -31,6 +31,7 @@ class VideoView extends StatelessWidget {
           ),
         ],
       ),
+      
     );
   }
 }
