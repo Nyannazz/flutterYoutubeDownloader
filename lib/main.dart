@@ -23,7 +23,18 @@ class _MyAppState extends State<MyApp> {
   bool loading = false;
   bool found = false;
   final Map response = {};
-  Widget videoTab = Text("wating");
+  Widget videoTab;
+  final Widget welcomeScreen = SizedBox.expand(
+      child: Column(children: [
+    Text(
+      "Welcome! :)",
+      textAlign: TextAlign.center,
+    ),
+    Text(
+      "Search for Videos in the top bar",
+      textAlign: TextAlign.center,
+    )
+  ]));
 
   Future<String> getVideo() async {
     setState(() {
@@ -44,6 +55,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    videoTab = welcomeScreen;
     /* _tabController = TabController(length: 2); */
   }
 
@@ -51,30 +63,31 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: Scaffold( 
-          appBar: SearchBar(
-              searchVideo: (data) {
-                print(data);
-                getVideo();
-              },
-              appName: "CoonTube"),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: 0, // this will be set when a new tab is tapped
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Home'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                title: Text('Messages'),
-              ),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.person), title: Text('Profile'))
-            ],
-          ),
-          body: /* videoTab */
-              SnackBarPage(),),
+      home: Scaffold(
+        appBar: SearchBar(
+            searchVideo: (data) {
+              print(data);
+              getVideo();
+            },
+            appName: "CoonTube"),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0, // this will be set when a new tab is tapped
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              title: Text('Messages'),
+            ),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person), title: Text('Profile'))
+          ],
+        ),
+        body: videoTab
+        /* SnackBarPage() */,
+      ),
     );
   }
 }

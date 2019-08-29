@@ -5,68 +5,60 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 
-
-
-
 bool filterFormat(str, val) {
   List strParts = str.split("/");
   return strParts[0] == val;
 }
 
-Future<String> getFilePath() async {
-  final directory = await getApplicationDocumentsDirectory();
-  return directory.path;
-}
-
-
-
-Future<void> downloadVideo() async {
-  PermissionStatus permissionResult = await SimplePermissions.requestPermission(
-      Permission.WriteExternalStorage);
-  if (permissionResult == PermissionStatus.authorized) {
-    Dio dio = Dio();
-
-    /* var dirToSave = await getApplicationDocumentsDirectory();
-    var dirLol=await getExternalStorageDirectory(); */
-    var dlDir = await DownloadsPathProvider.downloadsDirectory;
-    /* Future<Directory> downloadsDirectory = DownloadsPathProvider.downloadsDirectory; */
-
-    try {
-      await dio
-          .download("https://i.imgur.com/W4KUBGP.jpg", "${dlDir.path}/dogo.jpg",
-              onReceiveProgress: (rec, total) {
-        print(((rec / total) * 100).toStringAsFixed(0) + "%");
-      });
-    } catch (e) {
-      throw e;
-    }
-    print("done");
-  }
-}
-
-List<Widget> createFormatList(arr) {
-  List<Widget> formatList = [];
-  for (Map item in arr) {
-    formatList
-        .add(Align(alignment: Alignment.centerLeft, child: Text(item["type"])));
-    formatList.add(
-        Align(alignment: Alignment.centerLeft, child: Text(item["quality"])));
-    formatList.add(Center(
-        child: Container(
-            height: 30.0,
-            child: RaisedButton(
-                onPressed: () {
-                  downloadVideo();
-                },
-                child: Text("DOWNLOAD")))));
-  }
-
-  return formatList;
-}
-
 class FormatSelect extends StatelessWidget {
   final List formats;
   FormatSelect([this.formats = const []]);
+
+  List<Widget> createFormatList(arr, snackBarCallBack) {
+    List<Widget> formatList = [];
+    for (Map item in arr) {
+      formatList.add(
+          Align(alignment: Alignment.centerLeft, child: Text(item["type"])));
+      formatList.add(
+          Align(alignment: Alignment.centerLeft, child: Text(item["quality"])));
+      formatList.add(Center(
+          child: Container(
+              height: 30.0,
+              child: RaisedButton(
+                  onPressed: () {
+                    downloadVideo(snackBarCallBack);
+                  },
+                  child: Text("DOWNLOAD")))));
+    }
+
+    return formatList;
+  }
+
+  Future<void> downloadVideo(snackBarCallBack) async {
+    PermissionStatus permissionResult =
+        await SimplePermissions.requestPermission(
+            Permission.WriteExternalStorage);
+    if (permissionResult == PermissionStatus.authorized) {
+      Dio dio = Dio();
+
+      /* var dirToSave = await getApplicationDocumentsDirectory();
+    var dirLol=await getExternalStorageDirectory(); */
+      var dlDir = await DownloadsPathProvider.downloadsDirectory;
+      /* Future<Directory> downloadsDirectory = DownloadsPathProvider.downloadsDirectory; */
+
+      try {
+        await dio.download(
+            "https://i.imgur.com/W4KUBGP.jpg", "${dlDir.path}/dogo.jpg",
+            onReceiveProgress: (rec, total) {
+          print(((rec / total) * 100).toStringAsFixed(0) + "%");
+        });
+      } catch (e) {
+        throw e;
+      }
+      print("done");
+      snackBarCallBack();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +89,10 @@ class FormatSelect extends StatelessWidget {
                     child: GridView.count(
                         crossAxisCount: 3,
                         childAspectRatio: 3,
-                        children: createFormatList(videoFormats)),
+                        children: createFormatList(videoFormats, () {
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text("Download finished")));
+                        })),
                   ),
                 ),
                 Card(
@@ -106,12 +101,21 @@ class FormatSelect extends StatelessWidget {
                     child: GridView.count(
                         crossAxisCount: 3,
                         childAspectRatio: 3,
-                        children: createFormatList(audioFormats)),
+                        children: createFormatList(audioFormats, () {
+                          Scaffold.of(context).showSnackBar(
+                              SnackBar(content: Text("Download finished")));
+                        })),
                   ),
                 ),
               ],
             ),
           )),
+          RaisedButton(
+            child: Text("S"),
+            onPressed: () {
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text("yey")));
+            },
+          )
         ],
       ),
     );
