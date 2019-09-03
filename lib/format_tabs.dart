@@ -82,15 +82,16 @@ class FormatTabs extends StatelessWidget {
               ),
             ),
             Expanded(
-                child: ConstrainedBox(
-              constraints: BoxConstraints.expand(),
-              child: TabBarView(
-                children: [
-                  FormatSelect(videoFormats),
-                  FormatSelect(audioFormats),
-                ],
+              child: ConstrainedBox(
+                constraints: BoxConstraints.expand(),
+                child: TabBarView(
+                  children: [
+                    FormatSelect(videoFormats),
+                    FormatSelect(audioFormats),
+                  ],
+                ),
               ),
-            )),
+            ),
           ],
         ),
       ),

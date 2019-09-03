@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
       loading = true;
     });
     http.Response response = await http.get(Uri.encodeFull(
-        "http://82.165.121.77:5000/simpleinfo?videolink=https://www.youtube.com/watch?v=Kk3hKNNSHqY"));
+        "http://10.0.2.2:5000/simpleinfo?videolink=https://www.youtube.com/watch?v=yIVqIAv11Gg"));
     print(response.body);
     setState(() {
       loading = false;
