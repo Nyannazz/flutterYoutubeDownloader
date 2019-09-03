@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './image_tab.dart';
-import './format_select.dart';
+import './format_tabs.dart';
 
 class VideoView extends StatelessWidget {
   final Map data;
@@ -16,7 +16,7 @@ class VideoView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.symmetric(vertical: 20.0),
+            margin: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 8.0),
             child: Text(
               data["title"],
               maxLines: 2,
@@ -25,13 +25,14 @@ class VideoView extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          ImageTab(data["thumbnail"]),
+          Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: ImageTab(data["thumbnail"])),
           Expanded(
-            child: FormatSelect(data["formats"]),
+            child: FormatTabs(data["formats"]),
           ),
         ],
       ),
-      
     );
   }
 }
