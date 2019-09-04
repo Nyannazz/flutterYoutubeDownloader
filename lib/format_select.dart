@@ -5,7 +5,8 @@ import 'package:downloads_path_provider/downloads_path_provider.dart';
 
 class FormatSelect extends StatefulWidget {
   final List formatList;
-  FormatSelect(this.formatList);
+  final String videoTitle;
+  FormatSelect(this.formatList, this.videoTitle);
   @override
   _FormatSelectState createState() => _FormatSelectState();
 }
@@ -22,7 +23,7 @@ class _FormatSelectState extends State<FormatSelect> {
     ));
   }
 
-  Future<void> downloadVideo(String url, scaffoldContext) async {
+  Future<void> downloadVideo(String targetUrl, scaffoldContext) async {
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
             Permission.WriteExternalStorage);
@@ -34,7 +35,7 @@ class _FormatSelectState extends State<FormatSelect> {
       try {
         updateSnackBar(scaffoldContext, "DOWNLOAD STARTED", 2);
         await dio.download(
-            "https://i.imgur.com/W4KUBGP.jpg", "${dlDir.path}/dogo.jpg",
+            targetUrl, "${dlDir.path}/dogo.mp4",
             onReceiveProgress: (rec, total) {
           print(((rec / total) * 100).toStringAsFixed(0) + "%");
         });
@@ -43,7 +44,6 @@ class _FormatSelectState extends State<FormatSelect> {
       }
       print("done");
       updateSnackBar(scaffoldContext, "DOWNLOAD FINISHED", 2);
-      /* snackBarCallBack("DOWNLOAD FINISHED", 2); */
     }
   }
 
@@ -70,17 +70,18 @@ class _FormatSelectState extends State<FormatSelect> {
                         child: RaisedButton(
                           child: Text("SAVE"),
                           onPressed: () {
-                            /* snackBarCallBack("VIDEO SAVED", 2); */
                             updateSnackBar(scaffoldContext, "VIDEO SAVED", 2);
                           },
                         ),
                       ),
                     )
-                  : Text(inputList[i]["quality"].toString())), onTap: () {
-            setState(() {
-              selectedRow = i;
-            });
-          }),
+                  : Text(inputList[i]["quality"].toString())), 
+                      onTap: () {
+                        print(inputList[i]["url"]);
+                        setState(() {
+                          selectedRow = i;
+                        });
+                      }),
           DataCell(
               (i == selected
                   ? Center(
@@ -90,7 +91,7 @@ class _FormatSelectState extends State<FormatSelect> {
                         child: RaisedButton(
                           child: Text("DL"),
                           onPressed: () {
-                            downloadVideo("asd", scaffoldContext);
+                            downloadVideo(inputList[i]["url"], scaffoldContext);
                           },
                         ),
                       ),
@@ -120,7 +121,8 @@ class _FormatSelectState extends State<FormatSelect> {
               numeric: false,
             ),
           ],
-          rows: createRows(widget.formatList, selectedRow, Scaffold.of(context))),
+          rows:
+              createRows(widget.formatList, selectedRow, Scaffold.of(context))),
     );
   }
 }

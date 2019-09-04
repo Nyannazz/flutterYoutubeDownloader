@@ -8,7 +8,8 @@ bool filterFormat(str, val) {
 
 class FormatTabs extends StatelessWidget {
   final List formats;
-  FormatTabs([this.formats = const []]);
+  final String videoTitle;
+  FormatTabs(this.videoTitle, [this.formats = const []]);
 
 
   @override
@@ -37,8 +38,8 @@ class FormatTabs extends StatelessWidget {
                 constraints: BoxConstraints.expand(),
                 child: TabBarView(
                   children: [
-                    FormatSelect(videoFormats),
-                    FormatSelect(audioFormats),
+                    FormatSelect(videoFormats, videoTitle),
+                    FormatSelect(audioFormats, videoTitle),
                   ],
                 ),
               ),
