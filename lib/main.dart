@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:async/async.dart' as async;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import './video_manager.dart';
 import './search_bar.dart';
 import './video_view.dart';
-import './snack_bar.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +21,7 @@ class _MyAppState extends State<MyApp> {
   bool found = false;
   final Map response = {};
   Widget videoTab;
+
   final Widget welcomeScreen = SizedBox.expand(
       child: Column(children: [
     Text(
@@ -41,22 +39,29 @@ class _MyAppState extends State<MyApp> {
       loading = true;
     });
     http.Response response = await http.get(Uri.encodeFull(
-        "http://10.0.2.2:5000/simpleinfo?videolink=https://www.youtube.com/watch?v=yIVqIAv11Gg"));
+        "http://yt-api.baizuo.online/simpleinfo?videolink=https://www.youtube.com/watch?v=yIVqIAv11Gg"));
     print(response.body);
+    pagesList[0]=VideoView(json.decode(response.body));
     setState(() {
       loading = false;
       found = true;
-      /* response = json.decode(response.body); */
-      videoTab = VideoView(json.decode(response.body));
+      currentPage = pagesList[0];
     });
   }
 
+  int navIndex = 0;
+  List<Widget> pagesList = [];
+  Widget currentPage;
+
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
+    Widget wA = Text("widget 2");
+    Widget wB = Text("widget 3");
     videoTab = welcomeScreen;
-    /* _tabController = TabController(length: 2); */
+    pagesList = [videoTab, wA, wB];
+    currentPage = pagesList[navIndex];
+
+    super.initState();
   }
 
   @override
@@ -71,7 +76,14 @@ class _MyAppState extends State<MyApp> {
             },
             appName: "CoonTube"),
         bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0, // this will be set when a new tab is tapped
+          currentIndex: navIndex,
+          onTap: (int index) {
+            setState(() {
+              navIndex = index;
+              currentPage = pagesList[index];
+            });
+            print(navIndex);
+          }, // this will be set when a new tab is tapped
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -85,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                 icon: Icon(Icons.person), title: Text('Profile'))
           ],
         ),
-        body: videoTab
+        body: /* videoTab */ currentPage
         /* SnackBarPage() */,
       ),
     );

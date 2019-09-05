@@ -13,6 +13,14 @@ class FormatSelect extends StatefulWidget {
 
 class _FormatSelectState extends State<FormatSelect> {
   int selectedRow = 0;
+  String currentVideoName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    currentVideoName = widget.videoTitle;
+  }
 
   void updateSnackBar(scaffoldContext, String message, int snackDuration) {
     scaffoldContext.removeCurrentSnackBar();
@@ -23,7 +31,8 @@ class _FormatSelectState extends State<FormatSelect> {
     ));
   }
 
-  Future<void> downloadVideo(String targetUrl, scaffoldContext) async {
+  Future<void> downloadVideo(String targetUrl, String videoName,
+      String videoFormat, scaffoldContext) async {
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
             Permission.WriteExternalStorage);
@@ -34,12 +43,13 @@ class _FormatSelectState extends State<FormatSelect> {
 
       try {
         updateSnackBar(scaffoldContext, "DOWNLOAD STARTED", 2);
-        await dio.download(
-            targetUrl, "${dlDir.path}/dogo.mp4",
+        await dio.download(targetUrl, "${dlDir.path}/$videoName.$videoFormat",
             onReceiveProgress: (rec, total) {
           print(((rec / total) * 100).toStringAsFixed(0) + "%");
         });
       } catch (e) {
+        updateSnackBar(scaffoldContext, "DOWNLOAD FAILED", 2);
+
         throw e;
       }
       print("done");
@@ -75,13 +85,12 @@ class _FormatSelectState extends State<FormatSelect> {
                         ),
                       ),
                     )
-                  : Text(inputList[i]["quality"].toString())), 
-                      onTap: () {
-                        print(inputList[i]["url"]);
-                        setState(() {
-                          selectedRow = i;
-                        });
-                      }),
+                  : Text(inputList[i]["quality"].toString())), onTap: () {
+            print(inputList[i]["url"]);
+            setState(() {
+              selectedRow = i;
+            });
+          }),
           DataCell(
               (i == selected
                   ? Center(
@@ -91,7 +100,11 @@ class _FormatSelectState extends State<FormatSelect> {
                         child: RaisedButton(
                           child: Text("DL"),
                           onPressed: () {
-                            downloadVideo(inputList[i]["url"], scaffoldContext);
+                            downloadVideo(
+                                inputList[i]["url"],
+                                currentVideoName,
+                                (inputList[i]["type"].split("/")[1]),
+                                scaffoldContext);
                           },
                         ),
                       ),
