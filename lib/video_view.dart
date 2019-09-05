@@ -29,7 +29,10 @@ class VideoView extends StatelessWidget {
               padding: EdgeInsets.only(bottom: 10.0),
               child: ImageTab(data["thumbnail"])),
           Expanded(
-            child: FormatTabs(data["title"], data["formats"]),
+            child: FormatTabs(
+                thumbnail: data["thumbnail"],
+                videoTitle: data["title"],
+                formats: data["formats"]),
           ),
         ],
       ),

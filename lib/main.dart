@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import './search_bar.dart';
 import './video_view.dart';
+import './welcome_screen.dart';
+import './video_manager.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,18 +24,6 @@ class _MyAppState extends State<MyApp> {
   final Map response = {};
   Widget videoTab;
 
-  final Widget welcomeScreen = SizedBox.expand(
-      child: Column(children: [
-    Text(
-      "Welcome! :)",
-      textAlign: TextAlign.center,
-    ),
-    Text(
-      "Search for Videos in the top bar",
-      textAlign: TextAlign.center,
-    )
-  ]));
-
   Future<String> getVideo() async {
     setState(() {
       loading = true;
@@ -41,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     http.Response response = await http.get(Uri.encodeFull(
         "http://yt-api.baizuo.online/simpleinfo?videolink=https://www.youtube.com/watch?v=yIVqIAv11Gg"));
     print(response.body);
-    pagesList[0]=VideoView(json.decode(response.body));
+    pagesList[0] = VideoView(json.decode(response.body));
     setState(() {
       loading = false;
       found = true;
@@ -52,14 +42,20 @@ class _MyAppState extends State<MyApp> {
   int navIndex = 0;
   List<Widget> pagesList = [];
   Widget currentPage;
+  List<Map> videoList = [];
 
   @override
   void initState() {
+    /* init nav */
     Widget wA = Text("widget 2");
     Widget wB = Text("widget 3");
-    videoTab = welcomeScreen;
-    pagesList = [videoTab, wA, wB];
+    Widget videoListView=VideoManager();
+    videoTab = WelcomeScreen();
+    pagesList = [videoTab, videoListView, wB];
     currentPage = pagesList[navIndex];
+
+    /* init videolist from storage */
+    videoList=[];
 
     super.initState();
   }

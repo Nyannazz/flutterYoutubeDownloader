@@ -4,7 +4,7 @@ import './videos.dart';
 
 class VideoManager extends StatefulWidget {
   final initialData;
-  VideoManager(this.initialData);
+  VideoManager({this.initialData});
   @override
   State<StatefulWidget> createState() {
     return _VideoManagerState();
@@ -16,7 +16,7 @@ class _VideoManagerState extends State<VideoManager> {
 
   @override
   void initState(){
-    _videos.add(widget.initialData);
+    /* _videos.add(widget.initialData); */
     super.initState();
   }
 

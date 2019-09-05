@@ -9,8 +9,13 @@ bool filterFormat(str, val) {
 class FormatTabs extends StatelessWidget {
   final List formats;
   final String videoTitle;
-  FormatTabs(this.videoTitle, [this.formats = const []]);
-
+  final String thumbnail;
+  FormatTabs(
+      {Key key,
+      String this.thumbnail,
+      String this.videoTitle,
+      List this.formats = const []})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

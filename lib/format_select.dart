@@ -17,7 +17,6 @@ class _FormatSelectState extends State<FormatSelect> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     currentVideoName = widget.videoTitle;
   }
@@ -33,6 +32,7 @@ class _FormatSelectState extends State<FormatSelect> {
 
   Future<void> downloadVideo(String targetUrl, String videoName,
       String videoFormat, scaffoldContext) async {
+        /* get write permission from user */
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
             Permission.WriteExternalStorage);
