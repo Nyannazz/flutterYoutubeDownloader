@@ -21,22 +21,33 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool loading = false;
   bool found = false;
+  bool error = false;
   final Map response = {};
   Widget videoTab;
 
-  Future<String> getVideo() async {
+  Future<String> getVideo(String videoUrl) async {
     setState(() {
       loading = true;
     });
     http.Response response = await http.get(Uri.encodeFull(
-        "http://yt-api.baizuo.online/simpleinfo?videolink=https://www.youtube.com/watch?v=yIVqIAv11Gg"));
-    print(response.body);
-    pagesList[0] = VideoView(json.decode(response.body));
-    setState(() {
-      loading = false;
-      found = true;
-      currentPage = pagesList[0];
-    });
+        "http://yt-api.baizuo.online/simpleinfo?videolink=$videoUrl"));
+    print(response);
+    if (response.statusCode == 200) {
+      pagesList[0] = VideoView(json.decode(response.body));
+      setState(() {
+        loading = false;
+        found = true;
+        currentPage = pagesList[0];
+      });
+    } else {
+      pagesList[0] = Text("something went wrong! :(");
+      setState(() {
+        loading = false;
+        found = true;
+        error = true;
+        currentPage = pagesList[0];
+      });
+    }
   }
 
   int navIndex = 0;
@@ -49,13 +60,13 @@ class _MyAppState extends State<MyApp> {
     /* init nav */
     Widget wA = Text("widget 2");
     Widget wB = Text("widget 3");
-    Widget videoListView=VideoManager();
+    Widget videoListView = VideoManager();
     videoTab = WelcomeScreen();
     pagesList = [videoTab, videoListView, wB];
     currentPage = pagesList[navIndex];
 
     /* init videolist from storage */
-    videoList=[];
+    videoList = [];
 
     super.initState();
   }
@@ -68,7 +79,7 @@ class _MyAppState extends State<MyApp> {
         appBar: SearchBar(
             searchVideo: (data) {
               print(data);
-              getVideo();
+              getVideo(data);
             },
             appName: "CoonTube"),
         bottomNavigationBar: BottomNavigationBar(
