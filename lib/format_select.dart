@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
+import './video_name_dialog.dart';
 
 class FormatSelect extends StatefulWidget {
   final List formatList;
@@ -32,7 +33,7 @@ class _FormatSelectState extends State<FormatSelect> {
 
   Future<void> downloadVideo(String targetUrl, String videoName,
       String videoFormat, scaffoldContext) async {
-        /* get write permission from user */
+    /* get write permission from user */
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
             Permission.WriteExternalStorage);
@@ -97,16 +98,16 @@ class _FormatSelectState extends State<FormatSelect> {
                       child: Container(
                         color: Colors.greenAccent,
                         height: 30.0,
-                        child: RaisedButton(
-                          child: Text("DL"),
-                          onPressed: () {
-                            downloadVideo(
-                                inputList[i]["url"],
-                                currentVideoName,
-                                (inputList[i]["type"].split("/")[1]),
-                                scaffoldContext);
-                          },
-                        ),
+                        /* button that opens a dialog to give your download a custom name or just start the download */
+                        child: VideoNameDialog(
+                            initialContent: currentVideoName,
+                            submitForm: (String newName) {
+                              downloadVideo(
+                                  inputList[i]["url"],
+                                  newName,
+                                  (inputList[i]["type"].split("/")[1]),
+                                  scaffoldContext);
+                            }),
                       ),
                     )
                   : Text(inputList[i]["videoOnly"].toString())), onTap: () {

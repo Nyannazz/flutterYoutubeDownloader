@@ -5,6 +5,7 @@ import './search_bar.dart';
 import './video_view.dart';
 import './welcome_screen.dart';
 import './video_manager.dart';
+import './video_name_dialog.dart';
 
 void main() => runApp(MyApp());
 
@@ -58,8 +59,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     /* init nav */
-    Widget wA = Text("widget 2");
-    Widget wB = Text("widget 3");
+    Widget wB = VideoNameDialog();
     Widget videoListView = VideoManager();
     videoTab = WelcomeScreen();
     pagesList = [videoTab, videoListView, wB];
