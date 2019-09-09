@@ -23,7 +23,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   void initState() {
     super.initState();
-    
+    appBarTitle=Text(widget.appName);
   }
 
 

@@ -7,22 +7,26 @@ bool filterFormat(str, val) {
 }
 
 class FormatTabs extends StatelessWidget {
-  final List formats;
-  final String videoTitle;
-  final String thumbnail;
+  final Function saveVideo;
+  final dynamic videoData;
   FormatTabs(
       {Key key,
-      String this.thumbnail,
-      String this.videoTitle,
-      List this.formats = const []})
+      this.videoData,
+      this.saveVideo,
+      /* this.videoUrl,
+      this.thumbnail,
+      this.videoTitle,
+      this.formats = const [] */})
       : super(key: key);
+
+  
 
   @override
   Widget build(BuildContext context) {
     final List audioFormats =
-        formats.where((item) => filterFormat(item["type"], "audio")).toList();
+        videoData["formats"].where((item) => filterFormat(item["type"], "audio")).toList();
     final List videoFormats =
-        formats.where((item) => filterFormat(item["type"], "video")).toList();
+        videoData["formats"].where((item) => filterFormat(item["type"], "video")).toList();
     return Card(
       child: DefaultTabController(
         length: 2,
@@ -43,8 +47,8 @@ class FormatTabs extends StatelessWidget {
                 constraints: BoxConstraints.expand(),
                 child: TabBarView(
                   children: [
-                    FormatSelect(videoFormats, videoTitle),
-                    FormatSelect(audioFormats, videoTitle),
+                    FormatSelect(formatList: videoFormats, saveVideo: saveVideo),
+                    FormatSelect(formatList: audioFormats, saveVideo: saveVideo),
                   ],
                 ),
               ),

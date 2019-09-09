@@ -1,3 +1,15 @@
+import 'dart:convert';
+
+Video videoFromJson(String str) {
+  final jsonData = json.decode(str);
+  return Video.fromJson(jsonData);
+}
+
+String videoToJson(Video data) {
+  final dyn = data.toMap();
+  return json.encode(dyn);
+}
+
 class Video {
   final int id;
   final String name;
@@ -5,14 +17,27 @@ class Video {
   final String downloadUrl;
   final String thumbnailPath;
   final String filePath;
+  final String formatSelected;
 
-  Video(
-      {this.id,
+  Video({
+      this.id,
       this.name,
       this.url,
       this.downloadUrl,
       this.thumbnailPath,
-      this.filePath});
+      this.filePath,
+      this.formatSelected
+    });
+
+  factory Video.fromJson(Map<String, dynamic> json) => new Video(
+        id: json["id"],
+        name: json["name"],
+        url: json["url"],
+        downloadUrl: json["downloadUrl"],
+        thumbnailPath: json["thumbnailPath"],
+        filePath: json["filePath"],
+        formatSelected: json["formatSelected"],
+      );
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,7 +46,8 @@ class Video {
       "url": url,
       "downloadUrl": downloadUrl,
       "thumbnailPath": thumbnailPath,
-      "filePath": filePath
+      "filePath": filePath,
+      "formatSelected": formatSelected
     };
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sqflite/sqflite.dart';
-
 import 'dart:convert';
 
 import './search_bar.dart';
@@ -38,7 +37,7 @@ class _MyAppState extends State<MyApp> {
     http.Response response = await http.get(Uri.encodeFull(
         "http://yt-api.baizuo.online/simpleinfo?videolink=$videoUrl"));
     if (response.statusCode == 200) {
-      pagesList[0] = VideoView(json.decode(response.body));
+      pagesList[0] = VideoView(data: json.decode(response.body), videoUrl: videoUrl);
       setState(() {
         loading = false;
         found = true;

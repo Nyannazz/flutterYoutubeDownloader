@@ -3,23 +3,30 @@ import 'package:simple_permissions/simple_permissions.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import './video_name_dialog.dart';
+import './sqlLite/database.dart';
+import './sqlLite/video_model.dart';
 
 class FormatSelect extends StatefulWidget {
   final List formatList;
-  final String videoTitle;
-  FormatSelect(this.formatList, this.videoTitle);
+  final Function saveVideo;
+  final String videoName;
+
+  FormatSelect({Key key, this.formatList, this.saveVideo, this.videoName})
+      : super(key: key);
   @override
   _FormatSelectState createState() => _FormatSelectState();
 }
 
 class _FormatSelectState extends State<FormatSelect> {
   int selectedRow = 0;
+  String saveVideo;
   String currentVideoName;
 
   @override
   void initState() {
+    saveVideo = widget.saveVideo();
+    currentVideoName = widget.videoName;
     super.initState();
-    currentVideoName = widget.videoTitle;
   }
 
   void updateSnackBar(scaffoldContext, String message, int snackDuration) {
@@ -58,7 +65,8 @@ class _FormatSelectState extends State<FormatSelect> {
     }
   }
 
-  List createRows(List inputList, int selected, scaffoldContext) {
+  List createRows(
+      List inputList, int selected, scaffoldContext, Function saveVideo) {
     List<DataRow> outputList = [];
     for (int i = 0; i < inputList.length; i++) {
       outputList.add(DataRow(
@@ -81,6 +89,9 @@ class _FormatSelectState extends State<FormatSelect> {
                         child: RaisedButton(
                           child: Text("SAVE"),
                           onPressed: () {
+                            /* save video in database */
+                            saveVideo(inputList[i]["url"],
+                                (inputList[i]["type"]));
                             updateSnackBar(scaffoldContext, "VIDEO SAVED", 2);
                           },
                         ),
@@ -135,8 +146,11 @@ class _FormatSelectState extends State<FormatSelect> {
               numeric: false,
             ),
           ],
-          rows:
-              createRows(widget.formatList, selectedRow, Scaffold.of(context))),
+          rows: createRows(widget.formatList, selectedRow, Scaffold.of(context),
+              (String dlUrl, String formatSelected) {
+            widget.saveVideo(
+                dlUrlForFormat: dlUrl, formatSelected: formatSelected);
+          })),
     );
   }
 }
