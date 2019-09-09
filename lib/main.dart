@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sqflite/sqflite.dart';
+
 import 'dart:convert';
+
 import './search_bar.dart';
 import './video_view.dart';
 import './welcome_screen.dart';
 import './video_manager.dart';
 import './video_name_dialog.dart';
+/* import './sqlLite/sql_connection.dart'; */
 
 void main() => runApp(MyApp());
 
@@ -25,6 +29,7 @@ class _MyAppState extends State<MyApp> {
   bool error = false;
   final Map response = {};
   Widget videoTab;
+  Database videoDB;
 
   Future<String> getVideo(String videoUrl) async {
     setState(() {
@@ -32,7 +37,6 @@ class _MyAppState extends State<MyApp> {
     });
     http.Response response = await http.get(Uri.encodeFull(
         "http://yt-api.baizuo.online/simpleinfo?videolink=$videoUrl"));
-    print(response);
     if (response.statusCode == 200) {
       pagesList[0] = VideoView(json.decode(response.body));
       setState(() {
@@ -40,6 +44,8 @@ class _MyAppState extends State<MyApp> {
         found = true;
         currentPage = pagesList[0];
       });
+
+      /* videoDB = createConnection().then(() => print("done")); */
     } else {
       pagesList[0] = Text("something went wrong! :(");
       setState(() {
