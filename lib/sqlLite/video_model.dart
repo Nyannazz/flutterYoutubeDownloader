@@ -2,7 +2,7 @@ import 'dart:convert';
 
 Video videoFromJson(String str) {
   final jsonData = json.decode(str);
-  return Video.fromJson(jsonData);
+  return Video.fromMap(jsonData);
 }
 
 String videoToJson(Video data) {
@@ -29,7 +29,7 @@ class Video {
       this.formatSelected
     });
 
-  factory Video.fromJson(Map<String, dynamic> json) => new Video(
+  factory Video.fromMap(Map<String, dynamic> json) => new Video(
         id: json["id"],
         name: json["name"],
         url: json["url"],

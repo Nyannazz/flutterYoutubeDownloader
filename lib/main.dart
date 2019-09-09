@@ -8,7 +8,8 @@ import './video_view.dart';
 import './welcome_screen.dart';
 import './video_manager.dart';
 import './video_name_dialog.dart';
-/* import './sqlLite/sql_connection.dart'; */
+import './sqlLite/database.dart';
+import './sqlLite/video_model.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,7 +38,8 @@ class _MyAppState extends State<MyApp> {
     http.Response response = await http.get(Uri.encodeFull(
         "http://yt-api.baizuo.online/simpleinfo?videolink=$videoUrl"));
     if (response.statusCode == 200) {
-      pagesList[0] = VideoView(data: json.decode(response.body), videoUrl: videoUrl);
+      pagesList[0] =
+          VideoView(data: json.decode(response.body), videoUrl: videoUrl);
       setState(() {
         loading = false;
         found = true;
@@ -59,7 +61,7 @@ class _MyAppState extends State<MyApp> {
   int navIndex = 0;
   List<Widget> pagesList = [];
   Widget currentPage;
-  List<Map> videoList = [];
+  List videoList = [];
 
   @override
   void initState() {
@@ -71,13 +73,24 @@ class _MyAppState extends State<MyApp> {
     currentPage = pagesList[navIndex];
 
     /* init videolist from storage */
-    videoList = [];
+    DBProvider.db.getAllVideos().then(
+          (e) => e.forEach(
+            (item) {
+              String videoJson = videoToJson(item);
+              setState(() {
+                videoList.add(videoJson);
+              });
+            },
+          ),
+        );
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    videoList.forEach((e) => print("\n\n\n"+e));
+    print(videoList);
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: Scaffold(
