@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import './sqlLite/video_model.dart';
 
 import './videos.dart';
 
 class VideoManager extends StatefulWidget {
-  final initialData;
+  final List initialData;
   VideoManager({this.initialData});
   @override
   State<StatefulWidget> createState() {
@@ -12,28 +13,26 @@ class VideoManager extends StatefulWidget {
 }
 
 class _VideoManagerState extends State<VideoManager> {
-  List<String> _videos = ['Red Panda'];
+  List _videos = [];
 
   @override
-  void initState(){
-    /* _videos.add(widget.initialData); */
+  void initState() {
     super.initState();
+    _videos = widget.initialData;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Container(
-      margin: EdgeInsets.all(10.0),
-      child: RaisedButton(
-          onPressed: () {
-            setState(() {
-              _videos.add('cat video');
-            });
-          },
-          child: Text('Add Product')),
-    ),
-    Videos(_videos)
-    ],) ;
+
+    /* _videos.forEach((e) => print("\n\n\n"+e)); */
+    return Column(
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.all(10.0),
+          child: Text("YOUR VIDEOS"),
+        ),
+        Videos(_videos)
+      ],
+    );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Videos extends StatelessWidget {
-  final List<String> videos;
+  final List/* <String> */ videos;
   
   Videos([this.videos=const []]);
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Expanded(child: ListView(
       children: videos
           .map(
             (element) => Card(
@@ -19,7 +19,7 @@ class Videos extends StatelessWidget {
             ),
           )
           .toList(),
-    );
+    ));
   }
   
 }

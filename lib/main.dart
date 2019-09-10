@@ -62,35 +62,37 @@ class _MyAppState extends State<MyApp> {
   List<Widget> pagesList = [];
   Widget currentPage;
   List videoList = [];
+  Widget videoListView;
 
   @override
   void initState() {
     /* init nav */
     Widget wB = VideoNameDialog();
-    Widget videoListView = VideoManager();
-    videoTab = WelcomeScreen();
-    pagesList = [videoTab, videoListView, wB];
-    currentPage = pagesList[navIndex];
-
     /* init videolist from storage */
+
     DBProvider.db.getAllVideos().then(
           (e) => e.forEach(
             (item) {
               String videoJson = videoToJson(item);
-              setState(() {
-                videoList.add(videoJson);
-              });
+              videoList.add(videoJson);
+              /* create videomanager with new videlist from storage */
+              pagesList[1] = VideoManager(initialData: videoList.toList());
+              videoListView = VideoManager(initialData: videoList);
             },
           ),
         );
+    videoTab = WelcomeScreen();
+    pagesList = [videoTab, videoListView, wB];
+    currentPage = pagesList[navIndex];
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    videoList.forEach((e) => print("\n\n\n"+e));
-    print(videoList);
+    /* videoList.forEach((e) => print("\n\n\n"+e));
+    print(videoList); */
+
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: Scaffold(
