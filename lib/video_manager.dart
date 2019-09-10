@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './sqlLite/video_model.dart';
-
+import './video_list_tab.dart';
 import './videos.dart';
 
 class VideoManager extends StatefulWidget {
@@ -23,7 +23,6 @@ class _VideoManagerState extends State<VideoManager> {
 
   @override
   Widget build(BuildContext context) {
-
     /* _videos.forEach((e) => print("\n\n\n"+e)); */
     return Column(
       children: <Widget>[
@@ -31,7 +30,7 @@ class _VideoManagerState extends State<VideoManager> {
           margin: EdgeInsets.all(10.0),
           child: Text("YOUR VIDEOS"),
         ),
-        Videos(_videos)
+        VideoListTab(videoList: _videos)
       ],
     );
   }
