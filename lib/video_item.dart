@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class VideoItem extends StatelessWidget {
@@ -6,14 +8,15 @@ class VideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Map videoJson=jsonDecode(video);
     return Card(
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-              flex: 4,
-              child: Container(
-                  constraints: BoxConstraints.expand(height: 50.0),
-                  color: Colors.red)),
+            flex: 4,
+            child: Image.network(videoJson["thumbnailPath"]),
+          ),
           Expanded(
               flex: 6,
               child: Padding(
