@@ -25,10 +25,10 @@ class VideoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "asd",
+                      videoJson["name"],
                       textAlign: TextAlign.left,
                     ),
-                    Text("sadsadad", textAlign: TextAlign.left),
+                    Text(videoJson["filePath"], textAlign: TextAlign.left),
                   ],
                 ),
               )),

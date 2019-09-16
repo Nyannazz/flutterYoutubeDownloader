@@ -3,8 +3,7 @@ import 'package:simple_permissions/simple_permissions.dart';
 import 'package:dio/dio.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import './video_name_dialog.dart';
-import './sqlLite/database.dart';
-import './sqlLite/video_model.dart';
+
 
 class FormatSelect extends StatefulWidget {
   final List formatList;
@@ -65,8 +64,7 @@ class _FormatSelectState extends State<FormatSelect> {
     }
   }
 
-  List createRows(
-      List inputList, int selected, scaffoldContext, Function saveVideo) {
+  List createRows(List inputList, int selected, scaffoldContext, Function saveVideo) {
     List<DataRow> outputList = [];
     for (int i = 0; i < inputList.length; i++) {
       outputList.add(DataRow(
