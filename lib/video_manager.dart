@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import './sqlLite/video_model.dart';
+import './video_list_tab_controller.dart';
+/* import './sqlLite/video_model.dart';
 import './video_list_tab.dart';
-import './videos.dart';
+import './videos.dart'; */
 
 class VideoManager extends StatefulWidget {
   final List initialData;
@@ -30,7 +31,7 @@ class _VideoManagerState extends State<VideoManager> {
           margin: EdgeInsets.all(10.0),
           child: Text("YOUR VIDEOS"),
         ),
-        VideoListTab(videoList: _videos)
+        VideoListTabController(videoList: _videos)
       ],
     );
   }

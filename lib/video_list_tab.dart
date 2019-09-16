@@ -7,14 +7,8 @@ class VideoListTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView(
-        children: 
-          videoList.map((item)=>
-            VideoItem(video: item)
-          ).toList(),
-        
-      ),
+    return ListView(
+      children: videoList.map((item) => VideoItem(video: item)).toList(),
     );
   }
 }
