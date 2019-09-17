@@ -8,8 +8,7 @@ import './video_view.dart';
 import './welcome_screen.dart';
 import './video_manager.dart';
 import './video_name_dialog.dart';
-import './sqlLite/database.dart';
-import './sqlLite/video_model.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -68,20 +67,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     /* init nav */
     Widget wB = VideoNameDialog();
-    /* init videolist from storage */
 
-    DBProvider.db.getAllVideos().then(
-          (e) => e.forEach(
-            (item) {
-              String videoJson = videoToJson(item);
-              videoList.add(videoJson);
-              /* create videomanager with new videlist from storage */
-              pagesList[1] = VideoManager(initialData: videoList.toList());
-              videoListView = VideoManager(initialData: videoList);
-            },
-          ),
-        );
     videoTab = WelcomeScreen();
+    videoListView=VideoManager();
     pagesList = [videoTab, videoListView, wB];
     currentPage = pagesList[navIndex];
 

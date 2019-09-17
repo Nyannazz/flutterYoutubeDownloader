@@ -3,10 +3,11 @@ import './video_list_tab_controller.dart';
 /* import './sqlLite/video_model.dart';
 import './video_list_tab.dart';
 import './videos.dart'; */
+import './sqlLite/database.dart';
+import './sqlLite/video_model.dart';
 
 class VideoManager extends StatefulWidget {
-  final List initialData;
-  VideoManager({this.initialData});
+  VideoManager();
   @override
   State<StatefulWidget> createState() {
     return _VideoManagerState();
@@ -18,8 +19,17 @@ class _VideoManagerState extends State<VideoManager> {
 
   @override
   void initState() {
+    DBProvider.db.getAllVideos().then(
+          (e) => e.forEach(
+            (item) {
+              String videoJson = videoToJson(item);
+              setState(() {
+                _videos.add(videoJson);
+              });
+            },
+          ),
+        );
     super.initState();
-    _videos = widget.initialData;
   }
 
   @override
