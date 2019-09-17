@@ -121,11 +121,12 @@ class _MyAppState extends State<MyApp> {
               title: Text('Messages'),
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person), title: Text('Profile'))
+              icon: Icon(Icons.person),
+              title: Text('Profile'),
+            )
           ],
         ),
-        body: /* videoTab */ currentPage
-        /* SnackBarPage() */,
+        body: currentPage,
       ),
     );
   }

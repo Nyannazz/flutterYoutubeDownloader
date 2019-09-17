@@ -7,26 +7,20 @@ bool filterFormat(str, val) {
 }
 
 class FormatTabs extends StatelessWidget {
-  final Function saveVideo;
   final dynamic videoData;
-  FormatTabs(
-      {Key key,
-      this.videoData,
-      this.saveVideo,
-      /* this.videoUrl,
-      this.thumbnail,
-      this.videoTitle,
-      this.formats = const [] */})
-      : super(key: key);
-
-  
+  final String videoUrl;
+  FormatTabs({Key key, this.videoData, this.videoUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List audioFormats =
-        videoData["formats"].where((item) => filterFormat(item["type"], "audio")).toList();
-    final List videoFormats =
-        videoData["formats"].where((item) => filterFormat(item["type"], "video")).toList();
+    print(videoData);
+
+    final List audioFormats = videoData["formats"]
+        .where((item) => filterFormat(item["type"], "audio"))
+        .toList();
+    final List videoFormats = videoData["formats"]
+        .where((item) => filterFormat(item["type"], "video"))
+        .toList();
     return Card(
       child: DefaultTabController(
         length: 2,
@@ -47,8 +41,18 @@ class FormatTabs extends StatelessWidget {
                 constraints: BoxConstraints.expand(),
                 child: TabBarView(
                   children: [
-                    FormatSelect(formatList: videoFormats, saveVideo: saveVideo),
-                    FormatSelect(formatList: audioFormats, saveVideo: saveVideo),
+                    FormatSelect(
+                      videoName: videoData["title"],
+                      thumbnail: videoData["thumbnail"],
+                      formatList: videoFormats,
+                      videoUrl: videoUrl,
+                    ),
+                    FormatSelect(
+                      videoName: videoData["title"],
+                      thumbnail: videoData["thumbnail"],
+                      formatList: audioFormats,
+                      videoUrl: videoUrl,
+                    ),
                   ],
                 ),
               ),

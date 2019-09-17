@@ -18,7 +18,7 @@ class DBProvider {
   }
 
   initDB() async {
-    String path = join(await getDatabasesPath(), "CoonTubeDB.db");
+    String path = join(await getDatabasesPath(), "myCoonTube.db");
     return await openDatabase(path, version: 1, onOpen: (db) {
       print(db);
       print("succes");
@@ -39,7 +39,7 @@ class DBProvider {
   newVideo(Video newVideo) async {
     final db = await database;
     var res = await db.insert("Video", newVideo.toMap());
-    /* print(res); */
+    print(res);
     return res;
   }
 
@@ -52,9 +52,7 @@ class DBProvider {
   getAllVideos() async {
     final db = await database;
     var res = await db.query("Video");
-
-    /* return res; */
-    print(res);
+    /* print(res); */
     return res.isNotEmpty ? res.map((c) => Video.fromMap(c)).toList() : [];
   }
 
@@ -62,4 +60,10 @@ class DBProvider {
     final db = await database;
     db.delete("Video", where: "id = ?", whereArgs: [id]);
   } */
+
+  void dropTable(String tableName) async {
+    final db=await database;
+    db.execute("DROP table $tableName");
+    
+  }
 }

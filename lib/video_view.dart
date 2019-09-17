@@ -4,6 +4,8 @@ import './format_tabs.dart';
 import './sqlLite/database.dart';
 import './sqlLite/video_model.dart';
 
+
+
 class VideoView extends StatelessWidget {
   final Map data;
   final String videoUrl;
@@ -33,24 +35,13 @@ class VideoView extends StatelessWidget {
               child: ImageTab(data["thumbnail"])),
           Expanded(
             child: FormatTabs(
-                videoData: data,
-                saveVideo: (
-                    {String dlUrlForFormat,
-                    String formatSelected="mp4",
-                    String thumbnailPath="",
-                    String filePath=""}) {
-                  DBProvider.db.newVideo(Video(
-                    name: data["title"],
-                    url: videoUrl,
-                    downloadUrl: dlUrlForFormat,
-                    thumbnailPath: thumbnailPath!=""? thumbnailPath : data["thumbnail"],
-                    filePath: filePath,
-                    formatSelected: formatSelected
-                  ));
-                }),
+              videoData: data,
+              videoUrl: videoUrl,
+            ),
           ),
         ],
       ),
     );
   }
 }
+
