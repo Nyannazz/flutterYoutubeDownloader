@@ -34,16 +34,43 @@ class _VideoNameDialogState extends State<VideoNameDialog> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      Text(
+                        "change filename",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: TextField(
                           controller: _textController,
                           onSubmitted: (value) {
                             widget.submitForm(value);
-                            Navigator.of(context, rootNavigator: true).pop('dialog');
+                            Navigator.of(context, rootNavigator: true)
+                                .pop('dialog');
                           },
                         ),
-                      )
+                      ),
+                      Center(
+                          child: ButtonBar(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text("DOWNLOAD"),
+                            onPressed: () {
+                              widget.submitForm(_textController.text);
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop('dialog');
+                            },
+                          ),
+                          RaisedButton(
+                            child: Text("CLOSE"),
+                            onPressed: () =>
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop('dialog'),
+                          ),
+                        ],
+                      ))
                     ],
                   ),
                 ),

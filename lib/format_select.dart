@@ -38,8 +38,13 @@ class _FormatSelectState extends State<FormatSelect> {
     ));
   }
 
-  Future<void> downloadVideo(String targetUrl, String videoName,
-      String videoFormat, scaffoldContext, Function callback) async {
+  Future<void> downloadVideo(
+    String targetUrl,
+    String videoName,
+    String videoFormat,
+    scaffoldContext,
+    Function callback,
+  ) async {
     /* get write permission from user */
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
@@ -48,7 +53,7 @@ class _FormatSelectState extends State<FormatSelect> {
       Dio dio = Dio();
 
       var dlDir = await DownloadsPathProvider.downloadsDirectory;
-      String filePath="${dlDir.path}/$videoName.$videoFormat";
+      String filePath = "${dlDir.path}/$videoName.$videoFormat";
 
       try {
         updateSnackBar(scaffoldContext, "DOWNLOAD STARTED", 2);
@@ -63,7 +68,7 @@ class _FormatSelectState extends State<FormatSelect> {
       }
       print("done");
       // save video in database after download succesfully finished
-      callback(filePath);
+      callback(filePath, videoName);
       updateSnackBar(scaffoldContext, "DOWNLOAD FINISHED", 2);
     }
   }
@@ -143,23 +148,25 @@ class _FormatSelectState extends State<FormatSelect> {
                         height: 30.0,
                         /* button that opens a dialog to give your download a custom name or just start the download */
                         child: VideoNameDialog(
-                            initialContent: currentVideoName,
-                            submitForm: (String newName) {
-                              downloadVideo(
-                                inputList[i]["url"],
+                          initialContent: currentVideoName,
+                          submitForm: (String newName) {
+                            downloadVideo(
+                              inputList[i]["url"],
+                              newName,
+                              inputList[i]["type"].split("/")[1],
+                              scaffoldContext,
+                              /* callback to save video to database after succesfull download */
+                              (String filePath, String newName) => saveVideo(
                                 newName,
-                                inputList[i]["type"].split("/")[1],
-                                scaffoldContext,
-                                (String filePath)=>saveVideo(
-                                  videoName,
-                                  videoUrl,
-                                  inputList[i]["url"],
-                                  thumbnail,
-                                  filePath,
-                                  inputList[i]["type"],
-                                ),
-                              );
-                            }),
+                                videoUrl,
+                                inputList[i]["url"],
+                                thumbnail,
+                                filePath,
+                                inputList[i]["type"],
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     )
                   : Text(inputList[i]["videoOnly"].toString())), onTap: () {
