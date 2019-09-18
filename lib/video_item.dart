@@ -1,21 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 class VideoItem extends StatelessWidget {
-  final dynamic video;
+  final video;
   const VideoItem({Key key, this.video}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Map videoJson=jsonDecode(video);
     return Card(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
             flex: 4,
-            child: Image.network(videoJson["thumbnailPath"]),
+            child: Image.network(video.thumbnailPath),
           ),
           Expanded(
               flex: 6,
@@ -25,10 +23,13 @@ class VideoItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      videoJson["name"],
+                      video.name,
                       textAlign: TextAlign.left,
                     ),
-                    Text(videoJson["filePath"], textAlign: TextAlign.left),
+                    Text(
+                      video.filePath,
+                      textAlign: TextAlign.left,
+                    ),
                   ],
                 ),
               )),

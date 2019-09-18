@@ -22,9 +22,9 @@ class _VideoManagerState extends State<VideoManager> {
     DBProvider.db.getAllVideos().then(
           (e) => e.forEach(
             (item) {
-              String videoJson = videoToJson(item);
+              /* String videoJson = videoToJson(item); */
               setState(() {
-                _videos.add(videoJson);
+                _videos.add(item);
               });
             },
           ),
@@ -34,7 +34,6 @@ class _VideoManagerState extends State<VideoManager> {
 
   @override
   Widget build(BuildContext context) {
-    /* _videos.forEach((e) => print("\n\n\n"+e)); */
     return Column(
       children: <Widget>[
         Container(

@@ -39,7 +39,7 @@ class _FormatSelectState extends State<FormatSelect> {
   }
 
   Future<void> downloadVideo(String targetUrl, String videoName,
-      String videoFormat, scaffoldContext) async {
+      String videoFormat, scaffoldContext, Function callback) async {
     /* get write permission from user */
     PermissionStatus permissionResult =
         await SimplePermissions.requestPermission(
@@ -48,10 +48,11 @@ class _FormatSelectState extends State<FormatSelect> {
       Dio dio = Dio();
 
       var dlDir = await DownloadsPathProvider.downloadsDirectory;
+      String filePath="${dlDir.path}/$videoName.$videoFormat";
 
       try {
         updateSnackBar(scaffoldContext, "DOWNLOAD STARTED", 2);
-        await dio.download(targetUrl, "${dlDir.path}/$videoName.$videoFormat",
+        await dio.download(targetUrl, filePath,
             onReceiveProgress: (rec, total) {
           print(((rec / total) * 100).toStringAsFixed(0) + "%");
         });
@@ -61,6 +62,8 @@ class _FormatSelectState extends State<FormatSelect> {
         throw e;
       }
       print("done");
+      // save video in database after download succesfully finished
+      callback(filePath);
       updateSnackBar(scaffoldContext, "DOWNLOAD FINISHED", 2);
     }
   }
@@ -143,10 +146,19 @@ class _FormatSelectState extends State<FormatSelect> {
                             initialContent: currentVideoName,
                             submitForm: (String newName) {
                               downloadVideo(
+                                inputList[i]["url"],
+                                newName,
+                                inputList[i]["type"].split("/")[1],
+                                scaffoldContext,
+                                (String filePath)=>saveVideo(
+                                  videoName,
+                                  videoUrl,
                                   inputList[i]["url"],
-                                  newName,
-                                  (inputList[i]["type"].split("/")[1]),
-                                  scaffoldContext);
+                                  thumbnail,
+                                  filePath,
+                                  inputList[i]["type"],
+                                ),
+                              );
                             }),
                       ),
                     )

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import './video_model.dart';
@@ -43,7 +44,7 @@ class DBProvider {
     return res;
   }
 
- /*  getVideo(int id) async {
+  /*  getVideo(int id) async {
     final db = await database;
     var res = await db.query("Video", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? Video.fromMap(res.first) : Null;
@@ -52,9 +53,10 @@ class DBProvider {
   getAllVideos() async {
     final db = await database;
     var res = await db.query("Video");
-    /* print(res); */
     return res.isNotEmpty ? res.map((c) => Video.fromMap(c)).toList() : [];
   }
+
+
 
   /* deleteClient(int id) async {
     final db = await database;
@@ -62,8 +64,7 @@ class DBProvider {
   } */
 
   void dropTable(String tableName) async {
-    final db=await database;
+    final db = await database;
     db.execute("DROP table $tableName");
-    
   }
 }

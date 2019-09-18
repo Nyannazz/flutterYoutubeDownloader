@@ -33,8 +33,16 @@ class _VideoListTabControllerState extends State<VideoListTabController> {
               constraints: BoxConstraints.expand(),
               child: TabBarView(
                 children: [
-                  VideoListTab(videoList: widget.videoList),
-                  VideoListTab(videoList: widget.videoList),
+                  VideoListTab(
+                    videoList: widget.videoList
+                        .where((e) => e.filePath == "")
+                        .toList(),
+                  ),
+                  VideoListTab(
+                    videoList: widget.videoList
+                        .where((e) => e.filePath != "")
+                        .toList(),
+                  ),
                 ],
               ),
             ),
