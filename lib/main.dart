@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> {
         found = true;
         currentPage = pagesList[0];
         newVideoUrl = videoUrl;
+        navIndex = 0;
       });
     } else {
       pagesList[0] = Text("something went wrong! :(");
