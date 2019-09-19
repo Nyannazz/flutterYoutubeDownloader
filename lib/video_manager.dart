@@ -7,7 +7,8 @@ import './sqlLite/database.dart';
 import './sqlLite/video_model.dart';
 
 class VideoManager extends StatefulWidget {
-  VideoManager();
+  final Function getVideo;
+  VideoManager({this.getVideo});
   @override
   State<StatefulWidget> createState() {
     return _VideoManagerState();

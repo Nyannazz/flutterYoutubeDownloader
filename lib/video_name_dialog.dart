@@ -46,6 +46,7 @@ class _VideoNameDialogState extends State<VideoNameDialog> {
                           controller: _textController,
                           onSubmitted: (value) {
                             widget.submitForm(value);
+                            /* close dialog after submit */
                             Navigator.of(context, rootNavigator: true)
                                 .pop('dialog');
                           },

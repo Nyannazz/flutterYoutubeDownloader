@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+/* import 'package:youtube_dl/my_inherited_widget.dart'; */
 
 class VideoItem extends StatelessWidget {
   final video;
@@ -7,6 +8,9 @@ class VideoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /* final inItem=context.inheritFromWidgetOfExactType(MyInheritedWidget).data; */
+    /* final stuff=context.inheritFromWidgetOfExactType(MyInheritedWidget).data; */
+    /* final nose=MyInheritedWidget.of(context); */
     return Card(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

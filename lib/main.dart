@@ -8,7 +8,7 @@ import './video_view.dart';
 import './welcome_screen.dart';
 import './video_manager.dart';
 import './video_name_dialog.dart';
-
+import './state_provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,7 +17,6 @@ void getVideo(String url, Function callback) {}
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
@@ -26,9 +25,10 @@ class _MyAppState extends State<MyApp> {
   bool loading = false;
   bool found = false;
   bool error = false;
-  final Map response = {};
   Widget videoTab;
   Database videoDB;
+  Map videoData;
+  String newVideoUrl;
 
   Future<String> getVideo(String videoUrl) async {
     setState(() {
@@ -37,15 +37,14 @@ class _MyAppState extends State<MyApp> {
     http.Response response = await http.get(Uri.encodeFull(
         "http://yt-api.baizuo.online/simpleinfo?videolink=$videoUrl"));
     if (response.statusCode == 200) {
-      pagesList[0] =
-          VideoView(data: json.decode(response.body), videoUrl: videoUrl);
+      videoData = json.decode(response.body);
+      pagesList[0] = VideoView(data: videoData, videoUrl: videoUrl);
       setState(() {
         loading = false;
         found = true;
         currentPage = pagesList[0];
+        newVideoUrl = videoUrl;
       });
-
-      /* videoDB = createConnection().then(() => print("done")); */
     } else {
       pagesList[0] = Text("something went wrong! :(");
       setState(() {
@@ -69,7 +68,7 @@ class _MyAppState extends State<MyApp> {
     Widget wB = VideoNameDialog();
 
     videoTab = WelcomeScreen();
-    videoListView=VideoManager();
+    videoListView = VideoManager(getVideo: getVideo);
     pagesList = [videoTab, videoListView, wB];
     currentPage = pagesList[navIndex];
 
@@ -78,43 +77,45 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    /* videoList.forEach((e) => print("\n\n\n"+e));
-    print(videoList); */
-
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.deepPurple),
-      home: Scaffold(
-        appBar: SearchBar(
-            searchVideo: (data) {
-              print(data);
-              getVideo(data);
-            },
-            appName: "CoonTube"),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: navIndex,
-          onTap: (int index) {
-            setState(() {
-              navIndex = index;
-              currentPage = pagesList[index];
-            });
-            print(navIndex);
-          }, // this will be set when a new tab is tapped
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              title: Text('Messages'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile'),
-            )
-          ],
+      home: StateProvider(
+        videoData: videoData,
+        getVideo: getVideo,
+        videoUrl: newVideoUrl,
+        child: Scaffold(
+          appBar: SearchBar(
+              searchVideo: (data) {
+                print(data);
+                getVideo(data);
+              },
+              appName: "CoonTube"),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: navIndex,
+            onTap: (int index) {
+              setState(() {
+                navIndex = index;
+                currentPage = pagesList[index];
+              });
+              print(navIndex);
+            }, // this will be set when a new tab is tapped
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                title: Text('Messages'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text('Profile'),
+              )
+            ],
+          ),
+          body: currentPage,
         ),
-        body: currentPage,
       ),
     );
   }
