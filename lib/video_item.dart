@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:youtube_dl/state_provider.dart';
-/* import 'package:youtube_dl/my_inherited_widget.dart'; */
+
 
 class VideoItem extends StatelessWidget {
   final video;
@@ -10,7 +9,7 @@ class VideoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => StateProvider.of(context).getVideo(video.url),
+      onTap: () => StateProvider.of(context).refreshVideo(video),
       child: Card(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

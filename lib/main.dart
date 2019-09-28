@@ -9,10 +9,9 @@ import './welcome_screen.dart';
 import './video_manager.dart';
 import './video_name_dialog.dart';
 import './state_provider.dart';
+import './sqlLite/video_model.dart';
 
 void main() => runApp(MyApp());
-
-void getVideo(String url, Function callback) {}
 
 class MyApp extends StatefulWidget {
   @override
@@ -30,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   Map videoData;
   String newVideoUrl;
 
-  Future<String> getVideo(String videoUrl) async {
+  getVideo(String videoUrl) async {
     setState(() {
       loading = true;
     });
@@ -55,6 +54,41 @@ class _MyAppState extends State<MyApp> {
         currentPage = pagesList[0];
       });
     }
+  }
+
+  refreshVideo(Video videoItem) async {
+    /* youtube download links only work for a while. refresh the downloaddata while keeping thumbnail and other data */
+    if (videoItem.url != "") {
+      setState(() {
+        loading = true;
+      });
+      http.Response response = await http.get(Uri.encodeFull(
+          "http://yt-api.baizuo.online/formatlist?videolink=${videoItem.url}"));
+      if (response.statusCode == 200) {
+        videoData = json.decode(response.body);
+        print(videoData.runtimeType);
+        videoData["thumbnail"]=videoItem.thumbnailPath;
+        videoData["title"]=videoItem.name;
+        pagesList[0] = VideoView(data: videoData, videoUrl: videoItem.url);
+        setState(() {
+          loading = false;
+          found = true;
+          currentPage = pagesList[0];
+          newVideoUrl = videoItem.url;
+          navIndex = 0;
+        });
+      } else {
+        pagesList[0] = Text("something went wrong! :(");
+        setState(() {
+          loading = false;
+          found = true;
+          error = true;
+          currentPage = pagesList[0];
+        });
+      }
+    }
+
+    print(videoItem.url);
   }
 
   int navIndex = 0;
@@ -82,7 +116,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: StateProvider(
         videoData: videoData,
-        getVideo: getVideo,
+        refreshVideo: refreshVideo,
         videoUrl: newVideoUrl,
         child: Scaffold(
           appBar: SearchBar(
