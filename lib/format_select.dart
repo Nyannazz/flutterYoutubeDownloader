@@ -141,39 +141,42 @@ class _FormatSelectState extends State<FormatSelect> {
             });
           }),
           DataCell(
-              (i == selected
-                  ? Center(
-                      child: Container(
-                        color: Colors.greenAccent,
-                        height: 30.0,
-                        /* button that opens a dialog to give your download a custom name or just start the download */
-                        child: VideoNameDialog(
-                          initialContent: currentVideoName,
-                          submitForm: (String newName) {
-                            downloadVideo(
-                              inputList[i]["url"],
+            (i == selected
+                ? Center(
+                    child: Container(
+                      margin: EdgeInsets.only(right: 40.0),
+                      color: Colors.greenAccent,
+                      height: 30.0,
+                      /* button that opens a dialog to give your download a custom name or just start the download */
+                      child: VideoNameDialog(
+                        initialContent: currentVideoName,
+                        submitForm: (String newName) {
+                          downloadVideo(
+                            inputList[i]["url"],
+                            newName,
+                            inputList[i]["type"].split("/")[1],
+                            scaffoldContext,
+                            /* callback to save video to database after succesfull download */
+                            (String filePath, String newName) => saveVideo(
                               newName,
-                              inputList[i]["type"].split("/")[1],
-                              scaffoldContext,
-                              /* callback to save video to database after succesfull download */
-                              (String filePath, String newName) => saveVideo(
-                                newName,
-                                videoUrl,
-                                inputList[i]["url"],
-                                thumbnail,
-                                filePath,
-                                inputList[i]["type"],
-                              ),
-                            );
-                          },
-                        ),
+                              videoUrl,
+                              inputList[i]["url"],
+                              thumbnail,
+                              filePath,
+                              inputList[i]["type"],
+                            ),
+                          );
+                        },
                       ),
-                    )
-                  : Text(inputList[i]["videoOnly"].toString())), onTap: () {
-            setState(() {
-              selectedRow = i;
-            });
-          }),
+                    ),
+                  )
+                : Text(inputList[i]["videoOnly"].toString())),
+            onTap: () {
+              setState(() {
+                selectedRow = i;
+              });
+            },
+          ),
         ],
       ));
     }
@@ -187,8 +190,14 @@ class _FormatSelectState extends State<FormatSelect> {
       child: DataTable(
           /* columnSpacing: 50.0, */
           columns: <DataColumn>[
-            DataColumn(label: Text("type"), numeric: false),
-            DataColumn(label: Text("quality"), numeric: false),
+            DataColumn(
+              label: Text("type"),
+              numeric: false,
+            ),
+            DataColumn(
+              label: Text("quality"),
+              numeric: false,
+            ),
             DataColumn(
               label: Text("only video"),
               numeric: false,

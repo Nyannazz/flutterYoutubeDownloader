@@ -66,7 +66,6 @@ class _MyAppState extends State<MyApp> {
           "http://yt-api.baizuo.online/formatlist?videolink=${videoItem.url}"));
       if (response.statusCode == 200) {
         videoData = json.decode(response.body);
-        print(videoData.runtimeType);
         videoData["thumbnail"]=videoItem.thumbnailPath;
         videoData["title"]=videoItem.name;
         pagesList[0] = VideoView(data: videoData, videoUrl: videoItem.url);

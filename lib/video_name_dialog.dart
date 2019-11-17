@@ -78,7 +78,7 @@ class _VideoNameDialogState extends State<VideoNameDialog> {
               );
             });
       },
-      child: Text("Open Popup"),
+      child: Text("DOWNLOAD"),
     );
   }
 }
